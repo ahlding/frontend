@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
 
 export function ListUser() {
   const [users, setUsers] = useState([]);
@@ -13,6 +14,12 @@ export function ListUser() {
       setUsers(response.data);
     });
   }
+  const deleteUser = (id) => {
+    axios.delete('http://localhost:8080/api/$(id)/delete').then(function (response) {
+       console.log(response.data);
+       getUsers();
+    });
+  }
 
   return (
     <div>
@@ -20,23 +27,28 @@ export function ListUser() {
       <table>
         <thead>
           <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Mobile</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, key) => (
-            <tr key={key}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.mobile}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
+          <th>Name</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user, key) => (
+                  <tr key={key}>
+                    <td>{user.id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.mobile}</td>
+                    <td>
+                          <Link to={`/user/${user.id}/edit`} style={{ color: "red", textDecoration: "none" }}>Edit</Link>
+                          <span>{user.id}</span>
+                          <button onClick={() => deleteUser(user.id)}>Delete</button>
+                     </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      }      <th>#</th>
+
